@@ -1,0 +1,9 @@
+id;version;name;mitarbeiteranzahl;bettenanzahl;email;erzeugt;aktualisiert
+10;0;Vinzentius-Krankenhaus;500;200;vinzentius@krankenhaus.de;2026-01-01 00:00:00;2026-01-01 00:00:00
+20;0;Staedtisches-Klinikum;1000;800;staedtiches@klinikum.de;2026-01-01 00:00:00;2026-01-01 00:00:00
+30;0;Fachklinikum;300;100;fachklinikum@krankenhaus.de;2026-01-01 00:00:00;2026-01-01 00:00:00
+40;0;Klinikum-Mitte;800;500;2026-01-01 00:00:00;2026-01-01 00:00:00;2026-01-01 00:00:00
+50;0;Krankenhaus-Ulm;600;400;ulm@krankenhaus.de;2026-01-01 00:00:00;2026-01-01 00:00:00
+60;0;Klinikum-Nord;700;600;nord@klinikum.de;2026-01-01 00:00:00;2026-01-01 00:00:00
+70;0;Marien-Krankenhaus;400;300;marien@krankenhaus.de;2026-01-01 00:00:00;2026-01-01 00:00:00
+80;0;Klinikum-West;900;700;west@klinikum.de;2026-01-01 00:00:00;2026-01-01 00:00:00

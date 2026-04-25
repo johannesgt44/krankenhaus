@@ -1,0 +1,9 @@
+id;name;beschreibung;leitung;anzahlaerzte;krankenhaus_id
+10;Innere Medizin;Abteilung für Innere Medizin;Dr.Müller;20;10
+20;Chirurgie;Abteilung für Chirurgie;Dr.Schmidt;15;20
+30;Pädiatrie;Abteilung für Pädiatrie;Dr.Fischer;10;30
+40;Gynäkologie;Abteilung für Gynäkologie;Dr.Weber;12;40
+50;Neurologie;Abteilung für Neurologie;Dr.Wagner;8;50
+60;Radiologie;Abteilung für Radiologie;Dr.Becker;5;60
+70;Anästhesiologie;Abteilung für Anästhesiologie;Dr.Hoffmann;7;70
+80;Psychiatrie;Abteilung für Psychiatrie;Dr.Schulz;9;80

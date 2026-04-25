@@ -1,0 +1,9 @@
+id;strasse;hausnummer;plz;ort;krankenhaus_id
+10;Musterstraße;1;12345;Musterstadt;10
+20;Beispielweg;2;54321;Beispielstadt;20
+30;Testallee;3;67890;Teststadt;30
+40;Demoweg;4;98765;Demostadt;40
+50;Probestraße;5;13579;Probestadt;50
+60;Versuchsgasse;6;24680;Versuchsstadt;60
+70;Experimentstraße;7;11223;Experimentstadt;70
+80;Simulationsweg;8;33445;Simulationsstadt;80
