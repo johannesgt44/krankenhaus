@@ -44,8 +44,8 @@ model Krankenhaus {
   mitarbeiteranzahl Int?
   bettenanzahl      Int?
   email             String        @unique
-  erzeugt           DateTime      @default(now) @db.Timestamp(6)
-  aktualisiert      DateTime      @default(now) @db.Timestamp(6)  @updatedAt
+  erzeugt           DateTime      @default(now()) @db.Timestamp(6)
+  aktualisiert      DateTime      @default(now()) @db.Timestamp(6)  @updatedAt
   adresse           Adresse[]
   fachbereiche      Fachbereich[]
 
