@@ -22,6 +22,8 @@ model Adresse {
 
   @@index([krankenhausId])
   @@index([plz])
+  @@map("adresse")
+  @@schema("krankenhaus")
 }
 
 model Fachbereich {
@@ -35,6 +37,8 @@ model Fachbereich {
 
   @@index([krankenhausId], map: "fachbereichKrankenhausidIdx")
   @@index([name])
+  @@map("fachbereiche")
+  @@schema("krankenhaus")
 }
 
 model Krankenhaus {
@@ -50,4 +54,6 @@ model Krankenhaus {
   fachbereiche      Fachbereich[]
 
   @@index([name])
+  @@map("krankenhaus")
+  @@schema("krankenhaus")
 }
