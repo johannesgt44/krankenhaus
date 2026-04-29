@@ -37,7 +37,7 @@ model Fachbereich {
 
   @@index([krankenhausId], map: "fachbereichKrankenhausidIdx")
   @@index([name])
-  @@map("fachbereiche")
+  @@map("fachbereich")
   @@schema("krankenhaus")
 }
 
