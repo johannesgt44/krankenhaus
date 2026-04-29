@@ -52,7 +52,7 @@ try {
     await prisma.$connect();
 
     const krankenhaus: Krankenhaus | null = await prisma.krankenhaus.findUnique({
-        where: { id: 1 },
+        where: { id: 10 },
     });
     message = styleText(['black', 'bgWhite'], 'krankenhaus');
     console.log(`${message} = %j`, krankenhaus);
@@ -62,7 +62,7 @@ try {
         where: {
             adresse: {
                 ort: {
-                    contains: 'n',
+                    contains: 'o',
                 },
             },
         },
@@ -100,7 +100,7 @@ try {
         where: {
             adresse: {
                 strasse: {
-                    contains: 'n',
+                    contains: 'e',
                 },
             },
         },
