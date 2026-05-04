@@ -41,36 +41,40 @@ prisma.$on('query', (e: Prisma.QueryEvent) => {
     console.log(message);
 });
 
-export type KrankenhausMitAdresseUndFachbereiche = Prisma.KrankenhausGetPayload<{
-    include: {
-        adresse: true;
-        fachbereiche: true;
-    };
-}>;
+export type KrankenhausMitAdresseUndFachbereiche =
+    Prisma.KrankenhausGetPayload<{
+        include: {
+            adresse: true;
+            fachbereiche: true;
+        };
+    }>;
 
 try {
     await prisma.$connect();
 
-    const krankenhaus: Krankenhaus | null = await prisma.krankenhaus.findUnique({
-        where: { id: 10 },
-    });
+    const krankenhaus: Krankenhaus | null = await prisma.krankenhaus.findUnique(
+        {
+            where: { id: 10 },
+        },
+    );
     message = styleText(['black', 'bgWhite'], 'krankenhaus');
     console.log(`${message} = %j`, krankenhaus);
     console.log();
 
-    const krankenhaeuser: KrankenhausMitAdresseUndFachbereiche[] = await prisma.krankenhaus.findMany({
-        where: {
-            adresse: {
-                ort: {
-                    contains: 'o',
+    const krankenhaeuser: KrankenhausMitAdresseUndFachbereiche[] =
+        await prisma.krankenhaus.findMany({
+            where: {
+                adresse: {
+                    ort: {
+                        contains: 'o',
+                    },
                 },
             },
-        },
-        include: {
-            adresse: true,
-            fachbereiche: true,
-        },
-    });
+            include: {
+                adresse: true,
+                fachbereiche: true,
+            },
+        });
     message = styleText(['black', 'bgWhite'], 'krankenhaeuserMitAdr');
     console.log(`${message} = %j`, krankenhaeuser);
     console.log();
@@ -80,10 +84,11 @@ try {
     console.log(`${message} = %j`, adresse);
     console.log();
 
-    const krankenhaeuserPage2: Krankenhaus[] = await prisma.krankenhaus.findMany({
-        skip: 5,
-        take: 5,
-    });
+    const krankenhaeuserPage2: Krankenhaus[] =
+        await prisma.krankenhaus.findMany({
+            skip: 5,
+            take: 5,
+        });
     message = styleText(['black', 'bgWhite'], 'krankenhaeuserPage2');
     console.log(`${message} = %j`, krankenhaeuserPage2);
     console.log();
@@ -96,15 +101,16 @@ const adapterAdmin = new PrismaPg({
 });
 const prismaAdmin = new PrismaClient({ adapter: adapterAdmin });
 try {
-    const krankenhaeuserAdmin: Krankenhaus[] = await prismaAdmin.krankenhaus.findMany({
-        where: {
-            adresse: {
-                strasse: {
-                    contains: 'e',
+    const krankenhaeuserAdmin: Krankenhaus[] =
+        await prismaAdmin.krankenhaus.findMany({
+            where: {
+                adresse: {
+                    strasse: {
+                        contains: 'e',
+                    },
                 },
             },
-        },
-    });
+        });
     message = styleText(['black', 'bgWhite'], 'krankenhaeuserAdmin');
     console.log(`${message} = ${JSON.stringify(krankenhaeuserAdmin)}`);
 } finally {
