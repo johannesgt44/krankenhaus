@@ -87,7 +87,10 @@ export class KeycloakService {
 
         const responseBody = await response.json();
         this.#logPayload(responseBody);
-        this.#logger.debug('token: responseBody=%o', responseBody as object | null);
+        this.#logger.debug(
+            'token: responseBody=%o',
+            responseBody as object | null,
+        );
         return responseBody;
     }
 

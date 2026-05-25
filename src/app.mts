@@ -98,7 +98,6 @@ if (logger.isLevelEnabled('debug')) {
 // https://hono.dev/docs/api/exception#handling-httpexceptions
 // oxlint-disable-next-line promise/prefer-await-to-callbacks
 app.onError((error, c) => {
-
     if (error.name === 'ZodError') {
         return createProblemDetails(
             c,
