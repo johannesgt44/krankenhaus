@@ -33,14 +33,14 @@ jobs:
           DATABASE_URL: postgresql://krankenhaus:p@localhost:5432/krankenhaus?schema=krankenhaus
         run: bunx prisma generate
 
-      - name: Check formatting
-        run: bun run fmt:check
-
-      - name: Lint
-        run: bun run lint
-
       - name: Typecheck
         run: bun run tsc
 
-      - name: Test
+      - name: oxfmt
+        run: bun run fmt:check
+
+      - name: oxlint
+        run: bun run lint
+
+      - name: vitest
         run: bun run test -- --run --passWithNoTests
