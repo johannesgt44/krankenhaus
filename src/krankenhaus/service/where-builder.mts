@@ -41,10 +41,7 @@ export const buildWhere = ({ ...restProps }: Suchparameter) => {
                 break;
             }
             case 'bettenanzahl': {
-                const bettenanzahlNummer = Number.parseInt(
-                    value as string,
-                    10,
-                );
+                const bettenanzahlNummer = Number.parseInt(value as string, 10);
                 if (!Number.isNaN(bettenanzahlNummer)) {
                     where.bettenanzahl = { gte: bettenanzahlNummer };
                 }
