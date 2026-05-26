@@ -3,15 +3,15 @@
  * @packageDocumentation
  */
 
-import { type Prisma } from '../../../generated/prisma/client.ts';
-import { suchparameterNamen, type Suchparameter } from './suchparameter.mts';
+import { type Suchparameter, suchparameterNamen } from './suchparameter.mts';
 import { type KrankenhausInclude } from '../../../generated/prisma/models/Krankenhaus.ts';
 import { NotFoundError } from './errors.mts';
+import { type Pageable } from './pageable.mts';
+import { type Prisma } from '../../../generated/prisma/client.ts';
 import { type Slice } from './slice.mts';
 import { buildWhere } from './where-builder.mts';
 import { getLogger } from '../../logger/logger.mts';
 import { prismaClient } from '../../config/prisma-client.mts';
-import { Pageable } from './pageable.mts';
 
 type FindByIdParams = {
     readonly id: number;
@@ -67,7 +67,7 @@ export class KrankenhausService {
                 where: { id },
                 include,
             });
-        if (krankenhaus == null) {
+        if (krankenhaus === null) {
             this.#logger.debug(
                 'findById: Krankenhaus mit id=%d nicht gefunden',
                 id,
@@ -95,7 +95,7 @@ export class KrankenhausService {
             pageable,
         );
 
-        if (suchparameter == null) {
+        if (suchparameter === null) {
             return await this.#findAll(pageable);
         }
         const keys = Object.keys(suchparameter);
@@ -136,7 +136,7 @@ export class KrankenhausService {
         this.#logger.debug('count: where=%o', where ?? 'undefined');
         const { count } = prismaClient.krankenhaus;
         const anzahl =
-            where == undefined ? await count() : await count({ where });
+            where === undefined ? await count() : await count({ where });
         this.#logger.debug('count: anzahl=%d', anzahl);
         return anzahl;
     }
