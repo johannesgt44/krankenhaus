@@ -19,15 +19,16 @@ type FindByIdParams = {
 };
 
 export type KrankenhausMitAdresse = Prisma.KrankenhausGetPayload<{
-    include: { adresse: true; }
+    include: { adresse: true };
 }>;
 
-export type KrankenhausMitAdresseUndFachbereiche = Prisma.KrankenhausGetPayload<{
-    include: {
-        adresse: true;
-        fachbereiche: true;
-    }
-}>;
+export type KrankenhausMitAdresseUndFachbereiche =
+    Prisma.KrankenhausGetPayload<{
+        include: {
+            adresse: true;
+            fachbereiche: true;
+        };
+    }>;
 
 /**
  * Die Klasse `KrankenhausService` bietet Methoden für die Suche von Krankenhäusern
@@ -52,7 +53,9 @@ export class KrankenhausService {
     async findById({
         id,
         mitFachbereiche,
-    }: FindByIdParams): Promise<Readonly<KrankenhausMitAdresseUndFachbereiche>> {
+    }: FindByIdParams): Promise<
+        Readonly<KrankenhausMitAdresseUndFachbereiche>
+    > {
         this.#logger.debug('findById: id=%d', id);
 
         const include = mitFachbereiche
@@ -65,7 +68,10 @@ export class KrankenhausService {
                 include,
             });
         if (krankenhaus == null) {
-            this.#logger.debug('findById: Krankenhaus mit id=%d nicht gefunden', id);
+            this.#logger.debug(
+                'findById: Krankenhaus mit id=%d nicht gefunden',
+                id,
+            );
             throw new NotFoundError(`Krankenhaus mit id=${id} nicht gefunden`);
         }
         this.#logger.debug('findById: krankenhaus=%o', krankenhaus);
@@ -81,7 +87,7 @@ export class KrankenhausService {
      */
     async find(
         suchparameter: Suchparameter | null,
-        pageable: Pageable
+        pageable: Pageable,
     ): Promise<Readonly<Slice<Readonly<KrankenhausMitAdresse>>>> {
         this.#logger.debug(
             'find: suchparameter=%s, pageable=%o',
@@ -93,7 +99,7 @@ export class KrankenhausService {
             return await this.#findAll(pageable);
         }
         const keys = Object.keys(suchparameter);
-        if(keys.length === 0) {
+        if (keys.length === 0) {
             return await this.#findAll(pageable);
         }
 
@@ -113,7 +119,9 @@ export class KrankenhausService {
             });
         if (krankenhaeuser.length === 0) {
             this.#logger.debug('find: Keine Krankenhäuser gefunden');
-            throw new NotFoundError(`find:Keine Krankenhäuser gefunden ${JSON.stringify(suchparameter)}`);
+            throw new NotFoundError(
+                `find:Keine Krankenhäuser gefunden ${JSON.stringify(suchparameter)}`,
+            );
         }
         const totalElements = await this.count(where);
         return this.#createSlice(krankenhaeuser, totalElements);
@@ -134,14 +142,15 @@ export class KrankenhausService {
     }
 
     async #findAll(
-        pageable: Pageable
+        pageable: Pageable,
     ): Promise<Readonly<Slice<KrankenhausMitAdresse>>> {
         const { number, size } = pageable;
-        const krankenhaeuser: KrankenhausMitAdresse[] = await prismaClient.krankenhaus.findMany({
-            skip: number * size,
-            take: size,
-            include: this.#includeAdresse,
-        });
+        const krankenhaeuser: KrankenhausMitAdresse[] =
+            await prismaClient.krankenhaus.findMany({
+                skip: number * size,
+                take: size,
+                include: this.#includeAdresse,
+            });
         if (krankenhaeuser.length === 0) {
             this.#logger.debug('#findAll: Keine Krankenhäuser gefunden');
             throw new NotFoundError(`Ungueltige Seite "${number}"`);
@@ -165,7 +174,10 @@ export class KrankenhausService {
             content: krankenhaeuserDTO,
             totalElements,
         };
-        this.#logger.debug('#createSlice: krankenhausSlice=%o', krankenhausSlice);
+        this.#logger.debug(
+            '#createSlice: krankenhausSlice=%o',
+            krankenhausSlice,
+        );
         return krankenhausSlice;
     }
 
@@ -174,7 +186,8 @@ export class KrankenhausService {
         let validKeys = true;
         keys.forEach((key) => {
             if (!suchparameterNamen.includes(key)) {
-                this.#logger.debug('#checkKeys: Ungültiger Suchparameter "%s"',
+                this.#logger.debug(
+                    '#checkKeys: Ungültiger Suchparameter "%s"',
                     key,
                 );
                 validKeys = false;
