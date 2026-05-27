@@ -4,7 +4,9 @@
  */
 
 import { Hono } from 'hono';
-import { container } from '../../container.mts'
+import { container } from '../../container.mts';
+import { createPage } from './page.mts';
+import { createPageable } from '../service/pageable.mts';
 import { getLogger } from '../../logger/logger.mts';
 
 const { krankenhausService } = container;
@@ -47,4 +49,45 @@ router.get('/:id', async (ctx) => {
 
     logger.debug('get: krankenhaus=%o', krankenhaus);
     return json(krankenhaus);
+});
+
+/**
+ * GET /krankenhaus - Krankenhäuer anhand von Query-Parametern suchen
+ */
+router.get('/', async (ctx) => {
+    const { req } = ctx;
+
+    const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
+    if (accept !== '*/*' && !/(json|html)/u.test(accept)) {
+        logger.debug('get: Accept=%s', accept);
+        return ctx.body(null, 406);
+    }
+
+    const queryParams = req.query();
+    logger.debug('get: queryParams=%o', queryParams);
+    const countOnly = queryParams['count-only'];
+    if (countOnly !== undefined) {
+        const count = await krankenhausService.count();
+        logger.debug('get: count=%d', count);
+        return ctx.json({ count });
+    }
+
+    const { page, size } = queryParams;
+    delete queryParams['page'];
+    delete queryParams['size'];
+    logger.debug(
+        'get: page=%s, size=%s, queryParams=%o',
+        page,
+        size,
+        queryParams,
+    );
+
+    const pageable = createPageable({ number: page, size });
+    const krankenhausSlice = await krankenhausService.find(
+        queryParams,
+        pageable,
+    );
+    const krankenhausPage = createPage(krankenhausSlice, pageable);
+    logger.debug('get: kraankenhausPage=%o', krankenhausPage);
+    return ctx.json(krankenhausPage);
 });
