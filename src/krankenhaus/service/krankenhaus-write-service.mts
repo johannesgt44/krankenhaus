@@ -27,7 +27,7 @@ export class KrankenhausWriteService {
     readonly #logger = getLogger(KrankenhausWriteService.name);
 
     /**
-     * Ein neues Krankenhaus soll angelegt werden.
+     * Neues Krankenhaus soll angelegt werden.
      * @param krankenhaus Das neu abzulegende Krankenhaus
      * @returns Die ID des neu angelegten Krankenhauses
      * @throws EmailExists falls die Email-Adresse bereits existiert
