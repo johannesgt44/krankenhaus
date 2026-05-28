@@ -26,18 +26,6 @@
 export class NotFoundError extends Error {}
 
 /**
- * Error-Klasse für eine bereits existierende ISBN-Nummer.
- */
-export class IsbnExistsError extends Error {
-    readonly isbn: string | undefined;
-
-    constructor(isbn: string | undefined) {
-        super(`Die ISBN-Nummer ${isbn} existiert bereits.`);
-        this.isbn = isbn;
-    }
-}
-
-/**
  * Error-Klasse für eine ungültige Versionsnummer beim Ändern.
  */
 export class VersionInvalidError extends Error {
