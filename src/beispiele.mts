@@ -1,12 +1,13 @@
-import process from 'node:process';
-import { styleText } from 'node:util';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { prismaQueryInsights } from '@prisma/sqlcommenter-query-insights';
 import {
-    PrismaClient,
     type Krankenhaus,
     type Prisma,
+    PrismaClient,
 } from '../generated/prisma/client.ts';
+
+import { PrismaPg } from '@prisma/adapter-pg';
+import { prismaQueryInsights } from '@prisma/sqlcommenter-query-insights';
+import process from 'node:process';
+import { styleText } from 'node:util';
 
 let message = styleText(['black', 'bgWhite'], 'Node version');
 console.log(`${message}=${process.version}`);
@@ -34,10 +35,10 @@ const prisma = new PrismaClient({
     log,
     comments: [prismaQueryInsights()],
 });
-prisma.$on('query', (e: Prisma.QueryEvent) => {
-    message = styleText('green', `Query: ${e.query}`);
+prisma.$on('query', (event: Prisma.QueryEvent) => {
+    message = styleText('green', `Query: ${event.query}`);
     console.log(message);
-    message = styleText('cyan', `Duration: ${e.duration} ms`);
+    message = styleText('cyan', `Duration: ${event.duration} ms`);
     console.log(message);
 });
 
@@ -79,7 +80,7 @@ try {
     console.log(`${message} = %j`, krankenhaeuser);
     console.log();
 
-    const adresse = krankenhaeuser.map((b) => b.adresse);
+    const adresse = krankenhaeuser.map((kh) => kh.adresse);
     message = styleText(['black', 'bgWhite'], 'adresse');
     console.log(`${message} = %j`, adresse);
     console.log();

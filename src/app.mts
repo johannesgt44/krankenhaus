@@ -26,9 +26,9 @@ import { router as authRouter } from './security/auth-router.mts';
 import { compress } from 'hono/compress';
 import { cors } from 'hono/cors';
 import { corsOptions } from './config/cors.mts';
-import { createMiddleware } from 'hono/factory'; // oxlint-disable-line import/max-dependencies
+import { createMiddleware } from 'hono/factory';
 import { router as devRouter } from './config/dev/dev-router.mts';
-import { env } from './config/env.mts';
+import { env } from './config/env.mts'; // oxlint-disable-line import/max-dependencies
 import { getLogger } from './logger/logger.mts';
 import { router as healthRouter } from './admin/health-router.mts';
 import { paths } from './config/paths.mts';
@@ -98,7 +98,6 @@ if (logger.isLevelEnabled('debug')) {
 // https://hono.dev/docs/api/exception#handling-httpexceptions
 // oxlint-disable-next-line promise/prefer-await-to-callbacks
 app.onError((error, c) => {
-
     if (error.name === 'ZodError') {
         return createProblemDetails(
             c,
