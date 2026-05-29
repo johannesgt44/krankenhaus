@@ -37,6 +37,49 @@ vi.mock(import('../../mail/sendmail.mts'), () => {
     };
 });
 
+const createKrankenhaus = (): KrankenhausCreate => {
+    return {
+        version: 0,
+        name: 'Krankenhaus Test',
+        mitarbeiteranzahl: 100,
+        bettenanzahl: 50,
+        email: 'test@krankenhaus.de',
+        adresse: {
+            create: {
+                strasse: 'Teststrasse',
+                hausnummer: '1',
+                plz: '12345',
+                ort: 'Teststadt',
+            },
+        },
+        fachbereiche: {
+            create: [],
+        },
+    };
+};
+
+const createKrankenhausMock = (idMock: number) => {
+    return {
+        id: idMock,
+        version: 0,
+        name: 'Krankenhaus Test',
+        mitarbeiteranzahl: 100,
+        bettenanzahl: 50,
+        email: 'test@krankenhaus.de',
+        erzeugt: new Date(),
+        aktualisiert: new Date(),
+        adresse: {
+            id: 1,
+            strasse: 'Teststrasse',
+            hausnummer: '1',
+            plz: '12345',
+            ort: 'Teststadt',
+            krankenhausId: idMock,
+        },
+        fachbereiche: [],
+    };
+};
+
 describe('KrankenhausWriteService create', () => {
     let service: KrankenhausWriteService;
     let readService: KrankenhausService;
@@ -68,43 +111,8 @@ describe('KrankenhausWriteService create', () => {
     test('Neues Krankenhaus', async () => {
         // given
         const idMock = 1;
-        const krankenhaus: KrankenhausCreate = {
-            version: 0,
-            name: 'Krankenhaus Test',
-            mitarbeiteranzahl: 100,
-            bettenanzahl: 50,
-            email: 'test@krankenhaus.de',
-            adresse: {
-                create: {
-                    strasse: 'Teststrasse',
-                    hausnummer: '1',
-                    plz: '12345',
-                    ort: 'Teststadt',
-                },
-            },
-            fachbereiche: {
-                create: [],
-            },
-        };
-        const krankenhausMock = {
-            id: idMock,
-            version: 0,
-            name: 'Krankenhaus Test',
-            mitarbeiteranzahl: 100,
-            bettenanzahl: 50,
-            email: 'test@krankenhaus.de',
-            erzeugt: new Date(),
-            aktualisiert: new Date(),
-            adresse: {
-                id: 1,
-                strasse: 'Teststrasse',
-                hausnummer: '1',
-                plz: '12345',
-                ort: 'Teststadt',
-                krankenhausId: idMock,
-            },
-            fachbereiche: [],
-        };
+        const krankenhaus = createKrankenhaus();
+        const krankenhausMock = createKrankenhausMock(idMock);
         countMock.mockResolvedValue(0);
         createMock.mockResolvedValue(krankenhausMock);
         sendmailMock.mockResolvedValue(null);
