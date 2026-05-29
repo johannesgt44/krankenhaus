@@ -95,6 +95,25 @@ export class KrankenhausWriteService {
         return krankenhausUpdated?.version ?? Number.NaN;
     }
 
+    async delete(id: number) {
+        this.#logger.debug('delete: id=%d', id);
+
+        const krankenhaus = await prismaClient.krankenhaus.findUnique({
+            where: { id },
+        });
+        if (krankenhaus === null) {
+            this.#logger.debug('delete: not found');
+            return false;
+        }
+
+        await prismaClient.$transaction(async (tx) => {
+            await tx.krankenhaus.delete({ where: { id } });
+        });
+
+        this.#logger.debug('delete: deleted');
+        return true;
+    }
+
     async #validateCreate({
         email,
     }: Prisma.KrankenhausCreateInput): Promise<undefined> {
