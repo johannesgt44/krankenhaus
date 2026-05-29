@@ -4,8 +4,8 @@ import {
     VersionInvalidError,
     VersionOutdatedError,
 } from './errors.mts';
-import { type Prisma } from '../../../generated/prisma/client.ts';
 import { KrankenhausService } from './krankenhaus-service.mts';
+import { type Prisma } from '../../../generated/prisma/client.ts';
 import { getLogger } from '../../logger/logger.mts';
 import { prismaClient } from '../../config/prisma-client.mts';
 import { sendmail } from '../../mail/sendmail.mts';
@@ -129,13 +129,7 @@ export class KrankenhausWriteService {
         this.#logger.debug('#validateCreate: ok');
     }
 
-    static async #sendmail({
-        id,
-        name,
-    }: {
-        id: number | 'N/A';
-        name: string;
-    }) {
+    static async #sendmail({ id, name }: { id: number | 'N/A'; name: string }) {
         const subject = `Neues Krankenhaus ${id}`;
         const body = `Das Krankenhaus mit dem Namen <strong>${name}</strong> ist angelegt`;
         await sendmail({ subject, body });
