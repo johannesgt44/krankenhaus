@@ -36,3 +36,84 @@ vi.mock(import('../../mail/sendmail.mts'), () => {
         sendmail: sendmailMock,
     };
 });
+
+describe('KrankenhausWriteService create', () => {
+    let service: KrankenhausWriteService;
+    let readService: KrankenhausService;
+
+    beforeEach(() => {
+        readService = new KrankenhausService();
+        service = new KrankenhausWriteService(readService);
+
+        createMock.mockReset();
+        countMock.mockReset();
+        transactionMock.mockReset();
+        sendmailMock.mockReset();
+
+        transactionMock.mockImplementation(
+            async (
+                transactionBody: (
+                    tx: Prisma.TransactionClient,
+                ) => Promise<unknown>,
+            ) =>
+                await transactionBody({
+                    krankenhaus: {
+                        create: createMock,
+                        count: countMock,
+                    },
+                } as unknown as Prisma.TransactionClient),
+        );
+    });
+
+    test('Neues Krankenhaus', async () => {
+        // given
+        const idMock = 1;
+        const krankenhaus: KrankenhausCreate = {
+            version: 0,
+            name: 'Krankenhaus Test',
+            mitarbeiteranzahl: 100,
+            bettenanzahl: 50,
+            email: 'test@krankenhaus.de',
+            adresse: {
+                create: {
+                    strasse: 'Teststrasse',
+                    hausnummer: '1',
+                    plz: '12345',
+                    ort: 'Teststadt',
+                },
+            },
+            fachbereiche: {
+                create: [],
+            },
+        };
+        const krankenhausMock = {
+            id: idMock,
+            version: 0,
+            name: 'Krankenhaus Test',
+            mitarbeiteranzahl: 100,
+            bettenanzahl: 50,
+            email: 'test@krankenhaus.de',
+            erzeugt: new Date(),
+            aktualisiert: new Date(),
+            adresse: {
+                id: 1,
+                strasse: 'Teststrasse',
+                hausnummer: '1',
+                plz: '12345',
+                ort: 'Teststadt',
+                krankenhausId: idMock,
+            },
+            fachbereiche: [],
+        };
+        countMock.mockResolvedValue(0);
+        createMock.mockResolvedValue(krankenhausMock);
+        sendmailMock.mockResolvedValue(null);
+
+        // when
+        const id = await service.create(krankenhaus);
+
+        // then
+        expect(id).toBe(idMock);
+        expect(sendmailMock).toHaveBeenCalledOnce();
+    });
+});
