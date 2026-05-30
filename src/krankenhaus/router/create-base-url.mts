@@ -1,5 +1,5 @@
-import { KrankenhausService } from '../service/krankenhaus-service.mts';
 import { type HonoRequest } from 'hono';
+import { KrankenhausService } from '../service/krankenhaus-service.mts';
 
 export const createBaseUrl: (req: HonoRequest) => string = (
     req: HonoRequest,

@@ -25,7 +25,9 @@ export const router = new Hono();
 const logger = getLogger('krankenhaus-write-router', 'file');
 
 //Neu anlegen
-const krankenhausDtoToKrankenhausCreateInput = (krankenhausDTO: KrankenhausNeuType): KrankenhausCreate => {
+const krankenhausDtoToKrankenhausCreateInput = (
+    krankenhausDTO: KrankenhausNeuType,
+): KrankenhausCreate => {
     const fachbereiche = krankenhausDTO.fachbereiche?.map((fachbereichDTO) => {
         const fachbereich = {
             name: fachbereichDTO.name,
@@ -56,7 +58,7 @@ const krankenhausDtoToKrankenhausCreateInput = (krankenhausDTO: KrankenhausNeuTy
 router.post('/', rolesRequired('admin', 'user'), async (c) => {
     const requestBody = await c.req.json();
 
-    const krankenhausDTO = KrankenhausType = KrankenhausNeuSchema.parse(requestBody);
+    const krankenhausDTO = KrankenhausNeuSchema.parse(requestBody);
     logger.debug('POST /: krankenhausDTO=%o', krankenhausDTO);
 
     const krankenhaus = krankenhausDtoToKrankenhausCreateInput(krankenhausDTO);
@@ -69,8 +71,10 @@ router.post('/', rolesRequired('admin', 'user'), async (c) => {
 });
 
 // Update
-const krankenhausDtoToKrankenhausUpdate = (krankenhausDTO: KrankenhausUpdateType): KrankenhausUpdate => {
-    return{
+const krankenhausDtoToKrankenhausUpdate = (
+    krankenhausDTO: KrankenhausUpdateType,
+): KrankenhausUpdate => {
+    return {
         version: 0,
         name: krankenhausDTO.name,
         mitarbeiteranzahl: krankenhausDTO.mitarbeiteranzahl,
@@ -90,7 +94,7 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
 
     const version = req.header('If-Match');
     logger.debug('put: version=%s', version);
-    if(version === undefined) {
+    if (version === undefined) {
         logger.debug('put: version ist undefined');
         return createProblemDetails(
             c,
@@ -111,10 +115,8 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
         version,
     });
     logger.debug('put: neueVersion=%s', neueVersion);
-    const headers = {
-        ETAG: `"${neueVersion}"`,
-    };
-    return c.json(null, 204, headers);
+    c.header('ETag', `"${neueVersion}"`);
+    return c.body(null, 204);
 });
 
 // Löschen
@@ -129,5 +131,4 @@ router.delete('/:id', rolesRequired('admin'), async (c) => {
 
     await krankenhausWriteService.delete(idNumber);
     return body(null, 204);
-}
-);
+});

@@ -37,6 +37,54 @@ vi.mock(import('../../mail/sendmail.mts'), () => {
     };
 });
 
+const setupTransactionMock = () => {
+    transactionMock.mockImplementation(
+        async (
+            transactionBody: (tx: Prisma.TransactionClient) => Promise<unknown>,
+        ) =>
+            await transactionBody({
+                krankenhaus: {
+                    create: createMock,
+                    count: countMock,
+                },
+            } as unknown as Prisma.TransactionClient),
+    );
+};
+
+const createKrankenhaus = (): KrankenhausCreate => {
+    return {
+        version: 0,
+        name: 'Krankenhaus Test',
+        mitarbeiteranzahl: 100,
+        bettenanzahl: 50,
+        email: 'test@krankenhaus.de',
+        adresse: {
+            create: {
+                strasse: 'Teststrasse',
+                hausnummer: '1',
+                plz: '12345',
+                ort: 'Teststadt',
+            },
+        },
+        fachbereiche: {
+            create: [],
+        },
+    };
+};
+
+const createKrankenhausMock = (
+    krankenhaus: KrankenhausCreate,
+    idMock: number,
+) => {
+    const krankenhausTmp: any = { ...krankenhaus };
+    krankenhausTmp.id = idMock;
+    krankenhausTmp.erzeugt = new Date();
+    krankenhausTmp.aktualisiert = new Date();
+    krankenhausTmp.adresse.create.id = 11;
+    krankenhausTmp.adresse.create.krankenhausId = idMock;
+    return krankenhausTmp;
+};
+
 describe('KrankenhausWriteService create', () => {
     let service: KrankenhausWriteService;
     let readService: KrankenhausService;
@@ -50,48 +98,14 @@ describe('KrankenhausWriteService create', () => {
         transactionMock.mockReset();
         sendmailMock.mockReset();
 
-        transactionMock.mockImplementation(
-            async (
-                transactionBody: (
-                    tx: Prisma.TransactionClient,
-                ) => Promise<unknown>,
-            ) =>
-                await transactionBody({
-                    krankenhaus: {
-                        create: createMock,
-                        count: countMock,
-                    },
-                } as unknown as Prisma.TransactionClient),
-        );
+        setupTransactionMock();
     });
 
     test('Neues Krankenhaus', async () => {
         // given
         const idMock = 1;
-        const krankenhaus: KrankenhausCreate = {
-            version: 0,
-            name: 'Krankenhaus Test',
-            mitarbeiteranzahl: 100,
-            bettenanzahl: 50,
-            email: 'test@krankenhaus.de',
-            adresse: {
-                create: {
-                    strasse: 'Teststrasse',
-                    hausnummer: '1',
-                    plz: '12345',
-                    ort: 'Teststadt',
-                },
-            },
-            fachbereiche: {
-                create: [],
-            },
-        };
-        const krankenhausTmp: any = { ...krankenhaus };
-        krankenhausTmp.id = idMock;
-        krankenhausTmp.erzeugt = new Date();
-        krankenhausTmp.aktualisiert = new Date();
-        krankenhausTmp.adresse.create.id = 11;
-        krankenhausTmp.adresse.create.krankenhausId = idMock;
+        const krankenhaus = createKrankenhaus();
+        const krankenhausTmp = createKrankenhausMock(krankenhaus, idMock);
         // return von tx.krankenhaus.create()
         countMock.mockResolvedValue(0);
         createMock.mockResolvedValue(krankenhausTmp);
