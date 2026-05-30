@@ -117,3 +117,17 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
     return c.json(null, 204, headers);
 });
 
+// Löschen
+router.delete('/:id', rolesRequired('admin'), async (c) => {
+    const id = c.req.param('id') ?? '-1';
+    logger.debug('delete: id=%s', id);
+    const idNumber = Number.parseInt(id, 10);
+    const { body } = c;
+    if (Number.isNaN(idNumber)) {
+        return body(null, 204);
+    }
+
+    await krankenhausWriteService.delete(idNumber);
+    return body(null, 204);
+}
+);
