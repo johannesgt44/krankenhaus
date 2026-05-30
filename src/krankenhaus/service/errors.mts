@@ -15,30 +15,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Das Modul besteht aus den Klassen für die Fehlerbehandlung bei der Verwaltung
- * von Büchern, z.B. beim DB-Zugriff.
+ * Das Modul besteht aus den Klassen fuer die Fehlerbehandlung bei der Verwaltung
+ * von Krankenhaeusern, z.B. beim DB-Zugriff.
  * @packageDocumentation
  */
 
 /**
- * Error-Klasse für ein nicht gefundenes Buch.
+ * Error-Klasse fuer ein nicht gefundenes Krankenhaus.
  */
 export class NotFoundError extends Error {}
 
 /**
- * Error-Klasse für eine bereits existierende ISBN-Nummer.
- */
-export class IsbnExistsError extends Error {
-    readonly isbn: string | undefined;
-
-    constructor(isbn: string | undefined) {
-        super(`Die ISBN-Nummer ${isbn} existiert bereits.`);
-        this.isbn = isbn;
-    }
-}
-
-/**
- * Error-Klasse für eine ungültige Versionsnummer beim Ändern.
+ * Error-Klasse fuer eine ungueltige Versionsnummer beim Aendern.
  */
 export class VersionInvalidError extends Error {
     readonly version: string | undefined;
@@ -50,7 +38,7 @@ export class VersionInvalidError extends Error {
 }
 
 /**
- * Error-Klasse für eine veraltete Versionsnummer beim Ändern.
+ * Error-Klasse fuer eine veraltete Versionsnummer beim Aendern.
  */
 export class VersionOutdatedError extends Error {
     readonly version: number;
@@ -58,5 +46,17 @@ export class VersionOutdatedError extends Error {
     constructor(version: number) {
         super(`Die Versionsnummer ${version} ist nicht aktuell.`);
         this.version = version;
+    }
+}
+
+/**
+ * Error-Klasse fuer eine bereits existierende Email-Adresse.
+ */
+export class EmailExistsError extends Error {
+    readonly email: string;
+
+    constructor(email: string) {
+        super(`Die Email-Adresse ${email} existiert bereits.`);
+        this.email = email;
     }
 }

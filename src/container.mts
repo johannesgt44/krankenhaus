@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-//import { KrankenhausWriteService } from './krankenhaus/service/krankenhaus-write-service.mts';
 import { DbPopulateService } from './config/dev/db-populate.mts';
 import { KeycloakService } from './security/keycloak-service.mts';
 import { KrankenhausService } from './krankenhaus/service/krankenhaus-service.mts';
+import { KrankenhausWriteService } from './krankenhaus/service/krankenhaus-write-service.mts';
 
 const krankenhausService = new KrankenhausService();
 
@@ -28,7 +28,7 @@ const krankenhausService = new KrankenhausService();
  */
 export const container = {
     krankenhausService,
-    // krankenhausWriteService: new KrankenhausWriteService(krankenhausService),
+    krankenhausWriteService: new KrankenhausWriteService(krankenhausService),
     keycloakService: new KeycloakService(),
     dbPopulateService: new DbPopulateService(),
 };
