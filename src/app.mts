@@ -18,6 +18,7 @@ import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
 import {
     createProblemDetails,
     forbidden,
+    preconditionFailed,
     unauthorized,
     unprocessableContent,
 } from './problem-details.mts';
@@ -39,6 +40,7 @@ import { router } from './krankenhaus/router/krankenhaus-router.mts';
 import { secureHeaders } from 'hono/secure-headers';
 import { showRoutes } from 'hono/dev';
 import { trackMetrics } from './monitoring/prometheus-metrics.mts';
+import { NotFoundError, VersionInvalidError, VersionOutdatedError } from './krankenhaus/service/errors.mts';
 
 /**
  * Web-Applikation mit Hono.
@@ -100,12 +102,22 @@ if (logger.isLevelEnabled('debug')) {
 // https://hono.dev/docs/api/exception#handling-httpexceptions
 // oxlint-disable-next-line promise/prefer-await-to-callbacks
 app.onError((error, c) => {
+    if (error instanceof NotFoundError) {
+        return c.notFound();
+    }
+
     if (error.name === 'ZodError') {
         return createProblemDetails(
             c,
             unprocessableContent,
             (error as ZodError).issues,
         );
+    }
+
+    if (error instanceof VersionInvalidError ||
+        error instanceof VersionOutdatedError
+    ) {
+        return createProblemDetails(c, preconditionFailed, error.message);
     }
 
     if (error instanceof UnauthorizedError) {
