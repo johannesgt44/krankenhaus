@@ -16,6 +16,11 @@
 import { type Context, Hono, type Next } from 'hono';
 import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
 import {
+    NotFoundError,
+    VersionInvalidError,
+    VersionOutdatedError,
+} from './krankenhaus/service/errors.mts';
+import {
     createProblemDetails,
     forbidden,
     preconditionFailed,
@@ -28,10 +33,10 @@ import { compress } from 'hono/compress';
 import { cors } from 'hono/cors';
 import { corsOptions } from './config/cors.mts';
 import { createMiddleware } from 'hono/factory';
-import { router as devRouter } from './config/dev/dev-router.mts';
-import { env } from './config/env.mts'; // oxlint-disable-line import/max-dependencies
+import { router as devRouter } from './config/dev/dev-router.mts'; // oxlint-disable-line import/max-dependencies
+import { env } from './config/env.mts';
 import { getLogger } from './logger/logger.mts';
-import { router as healthRouter} from './admin/health-router.mts';
+import { router as healthRouter } from './admin/health-router.mts';
 import { paths } from './config/paths.mts';
 import { router as prometheusRouter } from './monitoring/prometheus-router.mts';
 import { requestLogger } from './logger/request-logger.mts';
@@ -40,7 +45,6 @@ import { router } from './krankenhaus/router/krankenhaus-router.mts';
 import { secureHeaders } from 'hono/secure-headers';
 import { showRoutes } from 'hono/dev';
 import { trackMetrics } from './monitoring/prometheus-metrics.mts';
-import { NotFoundError, VersionInvalidError, VersionOutdatedError } from './krankenhaus/service/errors.mts';
 
 /**
  * Web-Applikation mit Hono.
@@ -114,7 +118,8 @@ app.onError((error, c) => {
         );
     }
 
-    if (error instanceof VersionInvalidError ||
+    if (
+        error instanceof VersionInvalidError ||
         error instanceof VersionOutdatedError
     ) {
         return createProblemDetails(c, preconditionFailed, error.message);
