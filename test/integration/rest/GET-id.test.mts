@@ -4,9 +4,9 @@
 import { CONTENT_TYPE, IF_NONE_MATCH, restURL } from '../constants.mts';
 import { describe, expect, test } from 'vitest';
 
-const ids = [1, 2];
+const ids = [10, 20];
 const idNichtVorhanden = 999;
-const idsETag = [1, 2];
+const idsETag = [10, 20];
 const idFalsch = 'xyz';
 
 describe('GET /rest/:id', () => {
