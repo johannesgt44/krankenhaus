@@ -30,11 +30,12 @@ import { createMiddleware } from 'hono/factory';
 import { router as devRouter } from './config/dev/dev-router.mts';
 import { env } from './config/env.mts'; // oxlint-disable-line import/max-dependencies
 import { getLogger } from './logger/logger.mts';
-import { router as healthRouter } from './admin/health-router.mts';
+import { router as healthRouter} from './admin/health-router.mts';
 import { paths } from './config/paths.mts';
 import { router as prometheusRouter } from './monitoring/prometheus-router.mts';
 import { requestLogger } from './logger/request-logger.mts';
 import { responseTime } from './logger/response-time.mts';
+import { router } from './krankenhaus/router/krankenhaus-router.mts';
 import { secureHeaders } from 'hono/secure-headers';
 import { showRoutes } from 'hono/dev';
 import { trackMetrics } from './monitoring/prometheus-metrics.mts';
@@ -76,6 +77,7 @@ if (logger.isLevelEnabled('debug')) {
 // -----------------------------------------------------------------------------
 // R o u t e n
 // -----------------------------------------------------------------------------
+app.route(paths.rest, router);
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
 // Yoga baut eine Hono-App mit Basispfad "/graphql"
