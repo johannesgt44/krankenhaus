@@ -21,4 +21,4 @@ SET search_path TO krankenhaus;
 -- https://www.postgresql.org/docs/current/sql-copy.html
 COPY krankenhaus FROM '/init/krankenhaus/csv/krankenhaus.csv' (FORMAT csv, DELIMITER ';', HEADER true);
 COPY adresse FROM '/init/krankenhaus/csv/adresse.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY fachbereiche FROM '/init/krankenhaus/csv/fachbereiche.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY fachbereich FROM '/init/krankenhaus/csv/fachbereich.csv' (FORMAT csv, DELIMITER ';', HEADER true);
