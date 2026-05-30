@@ -9,11 +9,9 @@ import {
     type KrankenhausUpdateType,
 } from './krankenhaus-validation.mts';
 import {
-    badRequest,
     createProblemDetails,
     preconditionRequired,
 } from '../../problem-details.mts';
-import { File } from 'node:buffer';
 import { Hono } from 'hono';
 import { container } from '../../container.mts';
 import { createBaseUrl } from './create-base-url.mts';
@@ -69,3 +67,53 @@ router.post('/', rolesRequired('admin', 'user'), async (c) => {
     header('Location', location);
     return body(null, 201);
 });
+
+// Update
+const krankenhausDtoToKrankenhausUpdate = (krankenhausDTO: KrankenhausUpdateType): KrankenhausUpdate => {
+    return{
+        version: 0,
+        name: krankenhausDTO.name,
+        mitarbeiteranzahl: krankenhausDTO.mitarbeiteranzahl,
+        bettenanzahl: krankenhausDTO.bettenanzahl,
+        email: krankenhausDTO.email,
+    };
+};
+
+router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
+    const { req } = c;
+    const id = req.param('id') ?? '-1';
+    logger.debug('put: id=%s', id);
+    const idNumber = Number.parseInt(id, 10);
+    if (Number.isNaN(idNumber)) {
+        return c.notFound();
+    }
+
+    const version = req.header('If-Match');
+    logger.debug('put: version=%s', version);
+    if(version === undefined) {
+        logger.debug('put: version ist undefined');
+        return createProblemDetails(
+            c,
+            preconditionRequired,
+            'Header "If-Match" ist erforderlich.',
+        );
+    }
+    const requestBody = await c.req.json();
+    logger.debug('put: requestBody=%o', requestBody);
+
+    const krankenhausDTO = KrankenhausUpdateSchema.parse(requestBody);
+    logger.debug('put: krankenhausDTO=%o', krankenhausDTO);
+
+    const krankenhaus = krankenhausDtoToKrankenhausUpdate(krankenhausDTO);
+    const neueVersion = await krankenhausWriteService.update({
+        id: idNumber,
+        krankenhaus,
+        version,
+    });
+    logger.debug('put: neueVersion=%s', neueVersion);
+    const headers = {
+        ETAG: `"${neueVersion}"`,
+    };
+    return c.json(null, 204, headers);
+});
+
