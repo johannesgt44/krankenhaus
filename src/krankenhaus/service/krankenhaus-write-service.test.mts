@@ -1,4 +1,3 @@
-// oxlint-disable max-lines-per-function
 import {
     type KrankenhausCreate,
     KrankenhausWriteService,
