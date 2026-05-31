@@ -1,0 +1,32 @@
+info:
+  name: Name Vinzentius-Krankenhaus
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: "{{restUrl}}"
+  headers:
+    - name: Accept
+      value: application/json
+  params:
+    - name: name
+      value: Vinzentius-Krankenhaus
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.content
+      operator: isArray
+    - expression: res.body.content[0].name
+      operator: eq
+      value: Vinzentius-Krankenhaus
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

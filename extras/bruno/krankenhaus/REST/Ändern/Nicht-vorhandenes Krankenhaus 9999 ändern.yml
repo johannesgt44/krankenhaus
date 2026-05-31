@@ -1,0 +1,39 @@
+info:
+  name: Nicht-vorhandenes Krankenhaus 9999 ändern
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: If-Match
+      value: '"0"'
+  params:
+    - name: id
+      value: "9999"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Krankenhaus Nicht Vorhanden",
+        "mitarbeiteranzahl": 150,
+        "bettenanzahl": 75,
+        "email": "put-test-nicht-vorhanden@krankenhaus.de"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
