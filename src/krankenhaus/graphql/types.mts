@@ -2,7 +2,7 @@ import {
     type KrankenhausCreate,
     type KrankenhausUpdate,
 } from '../service/krankenhaus-write-service.mts';
-import { type KrankenhausMitAdresseUndFachbereiche } from '../service/krankenhaus-service.mts';
+import { type KrankenhausMitAdresse } from '../service/krankenhaus-service.mts';
 import { type Suchparameter } from '../service/suchparameter.mts';
 
 export type ID = string & { readonly __brand: 'ID' };
@@ -142,7 +142,7 @@ export type Krankenhaus = {
 };
 
 export const toKrankenhausType = (
-    krankenhaus: KrankenhausMitAdresseUndFachbereiche,
+    krankenhaus: KrankenhausMitAdresse,
 ): Krankenhaus => {
     const result: Krankenhaus = {
         id: toID(krankenhaus.id),
