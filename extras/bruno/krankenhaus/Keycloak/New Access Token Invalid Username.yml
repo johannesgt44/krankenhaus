@@ -1,0 +1,36 @@
+info:
+  name: New Access Token Invalid Username
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{oidcTokenUrl}}"
+  body:
+    type: form-urlencoded
+    data:
+      - name: grant_type
+        value: password
+      - name: username
+        value: invalid
+      - name: password
+        value: "{{password}}"
+      - name: client_id
+        value: "{{clientId}}"
+      - name: client_secret
+        value: "{{clientSecret}}"
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "401"
+    - expression: res.body.error
+      operator: eq
+      value: invalid_grant
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
