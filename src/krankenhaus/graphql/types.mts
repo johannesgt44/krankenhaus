@@ -1,3 +1,5 @@
+// oxlint-disable max-lines
+
 import {
     type KrankenhausCreate,
     type KrankenhausUpdate,
