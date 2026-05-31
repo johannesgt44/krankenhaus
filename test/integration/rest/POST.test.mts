@@ -90,3 +90,41 @@ describe('POST /rest', () => {
         expect(KrankenhausService.ID_PATTERN.test(idStr ?? '')).toBe(true);
     });
 
+    test('Neues Krankenhaus mit ungueltigen Daten nicht anlegen', async () => {
+        // given
+        const headers = new Headers();
+        headers.set(CONTENT_TYPE, APPLICATION_JSON);
+        headers.set(AUTHORIZATION, `${BEARER} ${token}`);
+
+        const expectedPaths = [
+            'name',
+            'mitarbeiteranzahl',
+            'bettenanzahl',
+            'email',
+        ];
+
+        // when
+        const response = await fetch(restURL, {
+            method: POST,
+            headers,
+            body: JSON.stringify(neuesKrankenhausInvalid),
+        });
+
+        // then
+        const { status } = response;
+
+        expect(status).toBe(422);
+
+        const body = (await response.json()) as ProblemDetails;
+        const validationIssues = body.detail as ValidationIssue[];
+
+        expect(validationIssues).toHaveLength(expectedPaths.length);
+
+        const paths = validationIssues.flatMap(({ path }) => {
+            const field = path.at(0);
+            return typeof field === 'string' ? [field] : [];
+        });
+
+        expect(paths).toStrictEqual(expect.arrayContaining(expectedPaths));
+    });
+});
