@@ -26,10 +26,8 @@ export type Page<T> = {
     };
 };
 
-export const createPage = <T,>(
-    slice: Slice<T>,
-    pageable: Pageable,
-): Page<T> => {
+// oxlint-disable-next-line func-style
+export function createPage<T>(slice: Slice<T>, pageable: Pageable): Page<T> {
     const { content, totalElements } = slice;
     const { size, number } = pageable;
     return {
@@ -41,4 +39,4 @@ export const createPage = <T,>(
             totalPages: Math.ceil(totalElements / size),
         },
     };
-};
+}
