@@ -232,8 +232,18 @@ export const toCreate = (input: KrankenhausNeuInput): KrankenhausCreate => {
         },
         fachbereiche: {
             create: (fachbereiche ?? []).map(
-                ({ name: fachbereichName, beschreibung, leitung, anzahlaerzte }) => {
-                    return { name: fachbereichName, beschreibung, leitung, anzahlaerzte };
+                ({
+                    name: fachbereichName,
+                    beschreibung,
+                    leitung,
+                    anzahlaerzte,
+                }) => {
+                    return {
+                        name: fachbereichName,
+                        beschreibung,
+                        leitung,
+                        anzahlaerzte,
+                    };
                 },
             ),
         },
@@ -248,13 +258,19 @@ export type CreatePayload = {
 // ----------------------------------------------------------------------------
 // Aktualisieren
 // ----------------------------------------------------------------------------
-export type KrankenhausUpdateInput = Omit<KrankenhausNeuInput, 'adresse' | 'fachbereiche'> & {
+export type KrankenhausUpdateInput = Omit<
+    KrankenhausNeuInput,
+    'adresse' | 'fachbereiche'
+> & {
     id: ID;
     version: Int;
 };
 
-export const toUpdate = (krankenhaus: KrankenhausUpdateInput): KrankenhausUpdate => {
-    const { version, name, mitarbeiteranzahl, bettenanzahl, email } = krankenhaus;
+export const toUpdate = (
+    krankenhaus: KrankenhausUpdateInput,
+): KrankenhausUpdate => {
+    const { version, name, mitarbeiteranzahl, bettenanzahl, email } =
+        krankenhaus;
     const krankenhausUpdate: KrankenhausUpdate = {
         version,
         name,

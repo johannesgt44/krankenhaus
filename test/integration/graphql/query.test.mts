@@ -19,15 +19,24 @@ export type KrankenhausDTO = Omit<
     'aktualisiert' | 'erzeugt'
 >;
 
-type KrankenhausSuccessType = { data: { krankenhaus: KrankenhausDTO }; errors?: undefined };
-type KrankenhaeuserSuccessType = { data: { krankenhaeuser: KrankenhausDTO[] }; errors?: undefined };
+type KrankenhausSuccessType = {
+    data: { krankenhaus: KrankenhausDTO };
+    errors?: undefined;
+};
+type KrankenhaeuserSuccessType = {
+    data: { krankenhaeuser: KrankenhausDTO[] };
+    errors?: undefined;
+};
 
 export type ErrorsType = {
     message: string;
     path: string[];
     extensions: { code: string };
 }[];
-type KrankenhausErrorsType = { data: { krankenhaus: null }; errors: ErrorsType };
+type KrankenhausErrorsType = {
+    data: { krankenhaus: null };
+    errors: ErrorsType;
+};
 
 // -----------------------------------------------------------------------------
 // Testdaten
@@ -42,7 +51,7 @@ let headers: Headers;
 const testKrankenhausZuId = async (id: number) => {
     // given
     const query: GraphQLQuery = {
-        query:`
+        query: `
             {
                 krankenhaus(id: "${id}") {
                     version
@@ -164,7 +173,8 @@ const testKrankenhausZuOrt = async (ortFilter: string) => {
         /application\/graphql-response\+json/iu,
     );
 
-    const { data, errors } = (await response.json()) as KrankenhaeuserSuccessType;
+    const { data, errors } =
+        (await response.json()) as KrankenhaeuserSuccessType;
 
     expect(errors).toBeUndefined();
     expect(data).toBeDefined();
@@ -196,13 +206,10 @@ describe('GraphQL Queries', () => {
         expect.hasAssertions();
         await testKrankenhausZuId(id);
     });
-    test.concurrent(
-        'Krankenhaus zu nicht vorhandener ID',
-        async () => {
-            expect.hasAssertions();
-            await testKrankenhausZuNichtVorhandenerId();
-        },
-    );
+    test.concurrent('Krankenhaus zu nicht vorhandener ID', async () => {
+        expect.hasAssertions();
+        await testKrankenhausZuNichtVorhandenerId();
+    });
     test.concurrent.each(orte)('Krankenhaus zu Ort %s', async (ortFilter) => {
         expect.hasAssertions();
         await testKrankenhausZuOrt(ortFilter);
