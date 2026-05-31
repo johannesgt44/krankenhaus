@@ -50,6 +50,14 @@ if (typeof keycloak === 'object') {
             'Der konfigurierte Client-ID für Keycloak ist kein String',
         );
     }
+    if (
+        keycloak.issuerExternal !== undefined &&
+        typeof keycloak.issuerExternal !== 'string'
+    ) {
+        throw new TypeError(
+            'Der externe Issuer fuer Keycloak ist kein String',
+        );
+    }
 }
 
 const schema = (keycloak?.schema as string | undefined) ?? 'https';
@@ -58,8 +66,13 @@ const port = (keycloak?.port as number | undefined) ?? 8443; // oxlint-disable-l
 const authServerUrl = `${schema}://${host}:${port}`;
 // Keycloak ist in Sicherheits-Bereiche (= realms) unterteilt
 const realm = (keycloak?.realm as string | undefined) ?? 'javascript';
-const issuer = `${authServerUrl}/realms/${realm}`;
-const oidcUrl = `${issuer}/protocol/openid-connect`;
+const issuerInternal = `${authServerUrl}/realms/${realm}`;
+const issuerExternal = keycloak?.issuerExternal as string | undefined;
+const issuer =
+    issuerExternal === undefined
+        ? issuerInternal
+        : [issuerInternal, issuerExternal];
+const oidcUrl = `${issuerInternal}/protocol/openid-connect`;
 const jwksUri = `${oidcUrl}/certs`;
 const clientId =
     (keycloak?.clientId as string | undefined) ?? 'javascript-client';
