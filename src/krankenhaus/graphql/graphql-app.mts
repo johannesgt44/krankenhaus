@@ -68,7 +68,7 @@ const yogaServer = createYoga({
 
 export const app = new Hono();
 
-app.post('/graphql', async (c) => {
+app.post('/', async (c) => {
     logger.debug('/graphql');
     const { raw } = c.req;
     const { body } = raw;

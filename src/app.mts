@@ -89,7 +89,7 @@ app.route(paths.rest, router);
 app.route(paths.rest, krankenhausWriteRouter);
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
-app.route('/', graphqlApp);
+app.route(paths.graphql, graphqlApp);
 app.route('/prometheus', prometheusRouter);
 
 const { NODE_ENV } = env;
