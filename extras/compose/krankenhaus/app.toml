@@ -52,7 +52,7 @@ log = false
 # L o g g i n g
 # ==============================================================================
 [log]
-#dir = "/tmp"
+dir = "/tmp"
 # Auskommentieren fuer Lasttests
 level = "debug"
 pretty = true
