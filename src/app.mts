@@ -45,6 +45,7 @@ import { router } from './krankenhaus/router/krankenhaus-router.mts';
 import { secureHeaders } from 'hono/secure-headers';
 import { showRoutes } from 'hono/dev';
 import { trackMetrics } from './monitoring/prometheus-metrics.mts';
+import { router as writeRouter } from './krankenhaus/router/krankenhaus-write-router.mts';
 
 /**
  * Web-Applikation mit Hono.
@@ -84,6 +85,7 @@ if (logger.isLevelEnabled('debug')) {
 // R o u t e n
 // -----------------------------------------------------------------------------
 app.route(paths.rest, router);
+app.route(paths.rest, writeRouter);
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
 // Yoga baut eine Hono-App mit Basispfad "/graphql"

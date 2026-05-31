@@ -52,6 +52,7 @@ USER nonroot
 
 COPY --chown=nonroot:nonroot package.json ./
 COPY --from=dist --chown=nonroot:nonroot /app/node_modules ./node_modules
+COPY --chown=nonroot:nonroot generated ./generated
 COPY --chown=nonroot:nonroot src ./src
 
 # Anzeige bei "docker inspect ..."
