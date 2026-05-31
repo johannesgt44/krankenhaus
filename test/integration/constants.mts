@@ -10,6 +10,7 @@ export const tokenPath = `${paths.auth}${paths.token}`;
 
 export const POST = 'POST';
 export const PUT = 'PUT';
+export const DELETE = 'DELETE';
 
 export const APPLICATION_JSON = 'application/json';
 
