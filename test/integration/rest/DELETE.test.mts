@@ -8,11 +8,9 @@ const id = '50';
 //Test
 describe('DELETE /rest', () => {
     let token: string;
-    let tokenUser: string;
 
     beforeAll(async () => {
         token = await getToken('admin', 'p');
-        tokenUser = await getToken('user', 'p');
     });
 
     test.concurrent('Vorhandenes Krankenhaus loeschen', async () => {
