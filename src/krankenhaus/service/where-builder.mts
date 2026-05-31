@@ -47,6 +47,11 @@ export const buildWhere = ({ ...restProps }: Suchparameter) => {
                 }
                 break;
             }
+            case 'ort':
+                where.adresse = {
+                    ort: { contains: value as string, mode: 'insensitive' },
+                };
+                break;
             default:
                 break;
         }

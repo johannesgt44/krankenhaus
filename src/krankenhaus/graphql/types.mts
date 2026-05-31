@@ -83,6 +83,7 @@ export const typeDefs = /* GraphQL */ `
         name: String
         mitarbeiteranzahl: Int
         bettenanzahl: Int
+        ort: String
     }
 
     "Daten für ein neues Krankenhaus"
@@ -92,16 +93,15 @@ export const typeDefs = /* GraphQL */ `
         bettenanzahl: Int!
         email: String
         adresse: AdresseInput!
+        fachbereiche: [FachbereichInput!]
     }
 
-    "Daten für die Aktualisierung eines Krankenhauses"
-    input KrankenhausUpdateInput {
+    "Daten für einen Fachbereich eines Krankenhauses"
+    input FachbereichInput {
         name: String!
-        mitarbeiteranzahl: Int!
-        bettenanzahl: Int!
-        email: String!
-        adresse: AdresseInput!
-        fachbereiche: [FachbereichInput!]
+        beschreibung: String
+        leitung: String
+        anzahlaerzte: Int
     }
 
     "Daten für eine Adresse eines Krankenhauses"
@@ -165,6 +165,7 @@ export type SuchparameterInput = {
     name?: string | undefined;
     mitarbeiteranzahl?: Int | undefined;
     bettenanzahl?: Int | undefined;
+    ort?: string | undefined;
 };
 
 export const toSuchparameter = (param?: SuchparameterInput) => {
@@ -172,7 +173,7 @@ export const toSuchparameter = (param?: SuchparameterInput) => {
         return null;
     }
 
-    const { name, mitarbeiteranzahl, bettenanzahl } = param;
+    const { name, mitarbeiteranzahl, bettenanzahl, ort } = param;
     const suchparameter: Record<string, any> = {};
     if (name !== undefined) {
         suchparameter['name'] = name;
@@ -182,6 +183,9 @@ export const toSuchparameter = (param?: SuchparameterInput) => {
     }
     if (bettenanzahl !== undefined) {
         suchparameter['bettenanzahl'] = bettenanzahl;
+    }
+    if (ort !== undefined) {
+        suchparameter['ort'] = ort;
     }
     return suchparameter as Suchparameter;
 };
@@ -227,20 +231,11 @@ export const toCreate = (input: KrankenhausNeuInput): KrankenhausCreate => {
             },
         },
         fachbereiche: {
-            create: (fachbereiche ?? []).map((fachbereich) => {
-                const {
-                    name: fachbereichName,
-                    beschreibung,
-                    leitung,
-                    anzahlaerzte,
-                } = fachbereich;
-                return {
-                    name: fachbereichName,
-                    beschreibung,
-                    leitung,
-                    anzahlaerzte,
-                };
-            }),
+            create: (fachbereiche ?? []).map(
+                ({ name: fachbereichName, beschreibung, leitung, anzahlaerzte }) => {
+                    return { name: fachbereichName, beschreibung, leitung, anzahlaerzte };
+                },
+            ),
         },
     };
     return krankenhausCreate;
@@ -253,19 +248,13 @@ export type CreatePayload = {
 // ----------------------------------------------------------------------------
 // Aktualisieren
 // ----------------------------------------------------------------------------
-export type KrankenhausUpdateInput = Omit<
-    KrankenhausNeuInput,
-    'adresse' | 'fachbereiche'
-> & {
+export type KrankenhausUpdateInput = Omit<KrankenhausNeuInput, 'adresse' | 'fachbereiche'> & {
     id: ID;
     version: Int;
 };
 
-export const toUpdate = (
-    krankenhaus: KrankenhausUpdateInput,
-): KrankenhausUpdate => {
-    const { version, name, mitarbeiteranzahl, bettenanzahl, email } =
-        krankenhaus;
+export const toUpdate = (krankenhaus: KrankenhausUpdateInput): KrankenhausUpdate => {
+    const { version, name, mitarbeiteranzahl, bettenanzahl, email } = krankenhaus;
     const krankenhausUpdate: KrankenhausUpdate = {
         version,
         name,
