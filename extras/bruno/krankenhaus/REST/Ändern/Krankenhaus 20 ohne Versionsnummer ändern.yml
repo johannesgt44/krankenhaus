@@ -1,0 +1,40 @@
+info:
+  name: Krankenhaus 20 ohne Versionsnummer ändern
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: Content-Type
+      value: application/json
+  params:
+    - name: id
+      value: "20"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Krankenhaus Test Geaendert",
+        "mitarbeiteranzahl": 150,
+        "bettenanzahl": 75,
+        "email": "put-test-geaendert@krankenhaus.de"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "428"
+    - expression: res.body.detail
+      operator: eq
+      value: Header "If-Match" ist erforderlich.
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
