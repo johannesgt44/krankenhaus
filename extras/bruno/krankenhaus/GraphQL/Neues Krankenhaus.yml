@@ -1,0 +1,65 @@
+info:
+  name: Neues Krankenhaus
+  type: graphql
+  seq: 4
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: Accept
+      value: application/graphql-response+json
+  body:
+    query: |-
+      mutation {
+        create(
+          input: {
+            name: "Testkrankenhaus"
+            mitarbeiteranzahl: 300
+            bettenanzahl: 250
+            email: "test@krankenhaus.de"
+            adresse: {
+              strasse: "Teststraße"
+              hausnummer: "4"
+              plz: "12345"
+              ort: "Testort"
+            }
+            fachbereiche: [{
+              name: "Testbereich"
+              beschreibung: "Testbeschreibung"
+              leitung: "Chef"
+              anzahlaerzte: 5
+            }]
+          }
+        ) {
+          id
+        }
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test('Body mit id', () => {
+          const { data } = res.getBody();
+          const id = parseInt(data.create.id, 10);
+          expect(id).to.be.gte(0);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: matches
+      value: ^application\/graphql-response\+json(; charset=utf-8)?$
+    - expression: res.body.data.create
+      operator: isJson
+    - expression: res.body.data.create.id
+      operator: isString
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
