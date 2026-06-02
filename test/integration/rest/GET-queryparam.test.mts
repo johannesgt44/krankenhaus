@@ -1,9 +1,9 @@
+// oxlint-disable max-lines-per-function
 import { CONTENT_TYPE, restURL } from '../constants.mts';
 import { describe, expect, test } from 'vitest';
 import { Krankenhaus } from '../../../generated/prisma/client.ts';
 import { KrankenhausMitAdresse } from '../../../src/krankenhaus/service/krankenhaus-service.mts';
 import { type Page } from '../../../src/krankenhaus/router/page.mts';
-
 
 // -----------------------------------------------------------------------------
 // Testdaten
@@ -63,9 +63,7 @@ describe('GET /rest', () => {
             body.content
                 .map((krankenhaus) => krankenhaus.adresse)
                 .forEach((ad) =>
-                    expect(ad?.ort).toStrictEqual(
-                        expect.stringContaining(ort),
-                    ),
+                    expect(ad?.ort).toStrictEqual(expect.stringContaining(ort)),
                 );
         },
     );
@@ -111,7 +109,9 @@ describe('GET /rest', () => {
             body.content
                 .map((krankenhaus) => krankenhaus)
                 .forEach((krank) =>
-                    expect(krank.mitarbeiteranzahl?.toString()).toStrictEqual(mitarbeiteranzahl),
+                    expect(krank.mitarbeiteranzahl?.toString()).toStrictEqual(
+                        mitarbeiteranzahl,
+                    ),
                 );
         },
     );
@@ -140,7 +140,9 @@ describe('GET /rest', () => {
             body.content
                 .map((krankenhaus) => krankenhaus)
                 .forEach((krank) =>
-                    expect(krank.bettenanzahl?.toString()).toStrictEqual(bettenanzahl),
+                    expect(krank.bettenanzahl?.toString()).toStrictEqual(
+                        bettenanzahl,
+                    ),
                 );
         },
     );
