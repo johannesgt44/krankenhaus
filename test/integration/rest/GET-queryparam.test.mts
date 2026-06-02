@@ -10,8 +10,8 @@ import { type Page } from '../../../src/krankenhaus/router/page.mts';
 // -----------------------------------------------------------------------------
 const ortArray = ['Musterstadt', 'Teststadt'];
 const ortNichtVorhanden = ['Hayna', 'Nirgends'];
-const mitarbeiteranzahlArray = ['1000'];
-const bettenanzahlArray = ['100'];
+const mitarbeiteranzahlArray = ['300'];
+const bettenanzahlArray = ['800'];
 
 // -----------------------------------------------------------------------------
 // Tests
