@@ -36,7 +36,9 @@ import { createMiddleware } from 'hono/factory';
 import { router as devRouter } from './config/dev/dev-router.mts'; // oxlint-disable-line import/max-dependencies
 import { env } from './config/env.mts';
 import { getLogger } from './logger/logger.mts';
+import { graphqlApp } from './krankenhaus/graphql/graphql-app.mts';
 import { router as healthRouter } from './admin/health-router.mts';
+import { router as krankenhausWriteRouter } from './krankenhaus/router/krankenhaus-write-router.mts';
 import { paths } from './config/paths.mts';
 import { router as prometheusRouter } from './monitoring/prometheus-router.mts';
 import { requestLogger } from './logger/request-logger.mts';
@@ -45,7 +47,6 @@ import { router } from './krankenhaus/router/krankenhaus-router.mts';
 import { secureHeaders } from 'hono/secure-headers';
 import { showRoutes } from 'hono/dev';
 import { trackMetrics } from './monitoring/prometheus-metrics.mts';
-import { router as writeRouter } from './krankenhaus/router/krankenhaus-write-router.mts';
 
 /**
  * Web-Applikation mit Hono.
@@ -85,10 +86,10 @@ if (logger.isLevelEnabled('debug')) {
 // R o u t e n
 // -----------------------------------------------------------------------------
 app.route(paths.rest, router);
-app.route(paths.rest, writeRouter);
+app.route(paths.rest, krankenhausWriteRouter);
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
-// Yoga baut eine Hono-App mit Basispfad "/graphql"
+app.route(paths.graphql, graphqlApp);
 app.route('/prometheus', prometheusRouter);
 
 const { NODE_ENV } = env;

@@ -7,6 +7,12 @@ export type Suchparameter = {
     readonly name?: string;
     readonly mitarbeiteranzahl?: number;
     readonly bettenanzahl?: number;
+    readonly ort?: string;
 };
 
-export const suchparameterNamen = ['name', 'mitarbeiteranzahl', 'bettenanzahl'];
+export const suchparameterNamen = [
+    'name',
+    'mitarbeiteranzahl',
+    'bettenanzahl',
+    'ort',
+];
