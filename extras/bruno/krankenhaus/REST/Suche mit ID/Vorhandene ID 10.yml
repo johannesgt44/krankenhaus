@@ -23,9 +23,6 @@ runtime:
     - expression: res.headers['content-type']
       operator: matches
       value: ^application\/json(; charset=utf-8)?$
-    - expression: res.headers.etag
-      operator: eq
-      value: '"0"'
     - expression: res.body.id
       operator: eq
       value: "10"

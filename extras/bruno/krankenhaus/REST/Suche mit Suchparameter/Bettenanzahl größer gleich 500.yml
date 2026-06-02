@@ -1,19 +1,18 @@
 info:
-  name: Alle Seite 2
+  name: Bettenanzahl größer gleich 500
   type: http
-  seq: 2
+  seq: 5
 
 http:
   method: GET
-  url: "{{restUrl}}"
+  url: "{{restUrl}}?bettenanzahl=500"
   headers:
     - name: Accept
       value: application/json
   params:
-    - name: page
-      value: "2"
-    - name: size
-      value: "5"
+    - name: bettenanzahl
+      value: "500"
+      type: query
   auth: inherit
 
 runtime:
@@ -23,9 +22,8 @@ runtime:
       value: "200"
     - expression: res.body.content
       operator: isArray
-    - expression: res.body.page.number
-      operator: eq
-      value: "1"
+    - expression: res.body.content
+      operator: isNotEmpty
 
 settings:
   encodeUrl: true

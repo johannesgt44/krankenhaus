@@ -1,17 +1,18 @@
 info:
   name: Nicht-vorhandene Property
   type: http
-  seq: 7
+  seq: 4
 
 http:
   method: GET
-  url: "{{restUrl}}"
+  url: "{{restUrl}}?strasse=10"
   headers:
     - name: Accept
       value: application/json
   params:
-    - name: foo
-      value: bar
+    - name: strasse
+      value: "10"
+      type: query
   auth: inherit
 
 runtime:
