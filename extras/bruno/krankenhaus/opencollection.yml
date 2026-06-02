@@ -41,6 +41,8 @@ request:
     - name: keycloakUrl
       value: http://localhost:8880
       disabled: true
+    - name: graphqlUrl
+      value: "{{baseUrl}}/graphql"
 bundled: false
 extensions:
   bruno:

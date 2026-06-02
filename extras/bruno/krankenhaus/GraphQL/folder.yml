@@ -1,7 +1,7 @@
 info:
-  name: Neuanlegen OAuth 2
+  name: GraphQL
   type: folder
-  seq: 4
+  seq: 2
 
 request:
   auth:
@@ -20,10 +20,3 @@ request:
       placement:
         header: Bearer
       source: access_token
-    settings:
-      autoFetchToken: true
-      autoRefreshToken: false
-
-docs:
-  content: Ueber die REST-Schnittstelle neue Krankenhaeuser mit OAuth 2 anlegen.
-  type: text/markdown

@@ -1,0 +1,49 @@
+info:
+  name: Suche Krankenhaus mit ID 20
+  type: graphql
+  seq: 1
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    query: |-
+      query ($id: ID! = "20") {
+        krankenhaus(id: $id) {
+          id
+          version
+          name
+          email
+          bettenanzahl
+          mitarbeiteranzahl
+          adresse {
+            plz
+            ort
+          }
+        }
+      }
+    variables: |-
+      {
+        "patientId": "20"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.data.krankenhaus.name
+      operator: isNotEmpty
+    - expression: res.body.data.krankenhaus.email
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
