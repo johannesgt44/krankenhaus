@@ -64,11 +64,11 @@ const logger = getLogger('app', 'file');
 // https://hono.dev/docs/guides/middleware#execution-order
 
 // Zusaetzliche Security-Header
-const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
+const securityHeaders = createMiddleware((c: Context, next: Next) => {
     c.header('X-Content-Type-Options', 'nosniff');
     // siehe CORS
     c.header('X-Frame-Options', 'SAMEORIGIN');
-    await next();
+    return next();
 });
 
 // https://hono.dev/docs/middleware/builtin/secure-headers

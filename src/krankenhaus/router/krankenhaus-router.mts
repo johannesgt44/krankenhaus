@@ -22,7 +22,7 @@ router.get('/:id', async (ctx) => {
     const { req } = ctx;
 
     const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
-    if (accept !== '*/*' && !/(json|html)/u.test(accept)) {
+    if (accept !== '*/*' && !/(?:json|html)/u.test(accept)) {
         logger.debug('get: Accept=%s', accept);
         return ctx.body(null, 406);
     }
@@ -58,7 +58,7 @@ router.get('/', async (ctx) => {
     const { req } = ctx;
 
     const accept = req.header('Accept')?.toLowerCase() ?? '*/*';
-    if (accept !== '*/*' && !/(json|html)/u.test(accept)) {
+    if (accept !== '*/*' && !/(?:json|html)/u.test(accept)) {
         logger.debug('get: Accept=%s', accept);
         return ctx.body(null, 406);
     }
